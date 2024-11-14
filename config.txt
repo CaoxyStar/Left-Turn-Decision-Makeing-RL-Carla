@@ -1,0 +1,23 @@
+map: Town05
+spectator: Transform(Location(x=25.000000, y=90.000000, z=40.000000), Rotation(pitch=-90.000000, yaw=90.000000, roll=0.000000))
+
+ego_vehicle_id: vehicle.mercedes.coupe
+ego_vehicle_init_location: x=28, y=64~74, z=0
+ego_vehicle destination: (75, 87, 0)
+
+# simple scene
+vehicle_id: vehicle.audi.a2
+forward_vehicle_location: (31, 105+7, 0)
+right_vehicle_location: (14-7, 92, 0)
+left_vehicle_location: (45+7, 88, 0)
+right_lane destination: right(85, 81, 0), straight(35, 40, 0)
+left_lane destination: straight(30, 40, 0), left(-20, 88, 0)
+
+# hard scene
+points: ()
+
+
+# action space
+throttle: (0, 0.3, 0.6)
+steer: (-0.4, -0.2, 0, 0.2, 0.4)
+brake: (0, 0.4, 0.8)
