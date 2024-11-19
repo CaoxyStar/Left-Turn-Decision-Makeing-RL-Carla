@@ -44,7 +44,7 @@ def action_mapping(action):
     return throttle, steering, brake
 
 # parameters
-state_space_dims = 8
+state_space_dims = 5
 action_space_dims = (3, 5, 3)
 buffer_maxlen = int(1e4)
 
@@ -52,7 +52,7 @@ buffer_maxlen = int(1e4)
 env = CarlaEnv()
 agent = QLearningAgent(state_space_dims, action_space_dims)
 
-agent.q_net.load_state_dict(torch.load("weight/DQN_car_700_turn.pth", weights_only=True))
+agent.q_net.load_state_dict(torch.load("weight/DQN_car_3250.pth", weights_only=True))
 buffer = ReplayBuffer(buffer_maxlen)
 
 
@@ -62,8 +62,9 @@ state = buffer.convert_state(state)
 
 done = False
 while not done:
-    action = agent.sample_action(state, training=True)
+    action = agent.sample_action(state, training=False)
     map_action = action_mapping(action)
+    print(map_action)
     next_state, reward, done = env.step(map_action)
     next_state = buffer.convert_state(next_state)
     state = next_state

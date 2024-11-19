@@ -71,7 +71,8 @@ class ReplayBuffer:
     def convert_state(self, state):
         ego_vehicle_state = torch.FloatTensor(state['ego_state'])
         next_point = torch.FloatTensor(state['next_point'])
-        state = torch.cat((ego_vehicle_state, next_point)).unsqueeze(0)
+        ego_vehicle_state[:3] = next_point - ego_vehicle_state[:3]
+        state = ego_vehicle_state.unsqueeze(0)
         return state
 
 

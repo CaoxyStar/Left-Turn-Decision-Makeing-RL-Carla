@@ -70,7 +70,7 @@ class CarlaEnv():
         ego_vehicle_bp = self.vehicle_bps.find('vehicle.mercedes.coupe')
         ego_location = carla.Location()
         ego_location.x = 28
-        ego_location.y = 74     #random.uniform(64, 74)
+        ego_location.y = random.uniform(64, 74)
         ego_location.z = 0
         ego_waypoint = self.map.get_waypoint(ego_location, project_to_road=True, lane_type=carla.LaneType.Driving)
         self.ego_vehicle = self.world.spawn_actor(ego_vehicle_bp, random.choice(self.map.get_spawn_points()))
@@ -84,20 +84,20 @@ class CarlaEnv():
         self.sensor_queue.queue.clear()
         self.camera.listen(lambda data: self.sensor_callback(data))
 
-        # # spawn auto vehicles at right inner lane
-        # right_inner_num = random.randint(1, 3)
-        # auto_vehicle_bp = self.vehicle_bps.find('vehicle.audi.a2')
-        # location = carla.Location()
-        # location.z = 0
-        # location.x = 14
-        # location.y = 92
+        # spawn auto vehicles at right inner lane
+        right_inner_num = random.randint(1, 3)
+        auto_vehicle_bp = self.vehicle_bps.find('vehicle.audi.a2')
+        location = carla.Location()
+        location.z = 0
+        location.x = 14
+        location.y = 92
 
-        # for i in range(right_inner_num):
-        #     auto_waypoint = self.map.get_waypoint(location, project_to_road=True, lane_type=carla.LaneType.Driving)
-        #     auto_vehicle = self.world.spawn_actor(auto_vehicle_bp, random.choice(self.map.get_spawn_points()))
-        #     auto_vehicle.set_transform(auto_waypoint.transform)
-        #     auto_vehicle.set_autopilot(True, 8000)
-        #     location.x = location.x - 7
+        for i in range(right_inner_num):
+            auto_waypoint = self.map.get_waypoint(location, project_to_road=True, lane_type=carla.LaneType.Driving)
+            auto_vehicle = self.world.spawn_actor(auto_vehicle_bp, random.choice(self.map.get_spawn_points()))
+            auto_vehicle.set_transform(auto_waypoint.transform)
+            auto_vehicle.set_autopilot(True, 8000)
+            location.x = location.x - 7
         
         # update world
         self.world.tick()
@@ -116,7 +116,7 @@ class CarlaEnv():
         self.route = grp.trace_route(start_waypoint.transform.location, end_waypoint.transform.location)
         self.last_index = 0
 
-        # # print global route
+        # print global route
         # print(len(self.route))
         # for i in range(len(self.route)):
         #     print(self.route[i][0].transform.location)
@@ -170,17 +170,17 @@ class CarlaEnv():
         
         if index > len(self.route) - 5:
             self.terminated = True
-        elif (position_diff > 5.0) or (yaw_diff > 45):
+        elif (position_diff > 3.0) or (yaw_diff > 45):
             self.truncated = True
-        elif self.iteration > 500:
+        elif self.iteration > 250:
             self.truncated = True
 
         # compute reward
-        reward_point = index * 50
-        reward_vel = -abs(5 - math.sqrt(ego_velocity.x**2 + ego_velocity.y**2))
+        reward_point = index * 10
+        reward_vel = -abs(5 - math.sqrt(ego_velocity.x**2 + ego_velocity.y**2)) * 10
         reward_pos = -position_diff * 100
         reward_ang = -yaw_diff * 5
-        # reward += (action[0] - action[2]) * 10
+        # reward_vel += action[0] * 100
         # reward -= action[1] * 10
         
         reward_flag = 0

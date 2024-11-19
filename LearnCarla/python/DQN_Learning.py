@@ -47,7 +47,7 @@ def action_mapping(action):
     return throttle, steering, brake
 
 # parameters
-state_space_dims = 8
+state_space_dims = 5
 action_space_dims = (3, 5, 3)
 buffer_maxlen = int(1e4)
 
@@ -55,8 +55,8 @@ buffer_maxlen = int(1e4)
 env = CarlaEnv()
 agent = QLearningAgent(state_space_dims, action_space_dims)
 
-agent.q_net.load_state_dict(torch.load("weight/DQN_car_700_turn.pth", weights_only=True))
-agent.target_q_net.load_state_dict(agent.q_net.state_dict())
+# agent.q_net.load_state_dict(torch.load("weight/DQN_car_700_turn.pth", weights_only=True))
+# agent.target_q_net.load_state_dict(agent.q_net.state_dict())
 print('************************')
 print('Load parameters successfully!')
 print('************************')
@@ -67,11 +67,6 @@ writer = SummaryWriter("runs/DQN_car")
 # train
 episode_num = int(1e5)
 batch_size = 128
-rewards_queue = collections.deque(maxlen=25)
-r_w = collections.deque(maxlen=25)
-r_v = collections.deque(maxlen=25)
-r_p = collections.deque(maxlen=25)
-r_a = collections.deque(maxlen=25)
 
 
 for episode in range(episode_num):
@@ -95,6 +90,10 @@ for episode in range(episode_num):
         replay_buffer.append(state, action, reward, next_state, done)
         state = next_state
 
+        if len(replay_buffer) > batch_size:
+            batch = replay_buffer.sample(batch_size)
+            agent.train(batch)
+
         episode_reward += reward
         w_reward += reward_list[1]
         v_reward += reward_list[2]
@@ -102,28 +101,22 @@ for episode in range(episode_num):
         a_reward += reward_list[4]
         t += 1
     
-    rewards_queue.append(episode_reward)
-    r_w.append(w_reward / t)
-    r_v.append(v_reward / t)
-    r_p.append(p_reward / t)
-    r_a.append(a_reward / t)
+    w_reward = w_reward / t
+    v_reward = v_reward / t
+    p_reward = p_reward / t
+    a_reward = a_reward / t
 
-    if len(replay_buffer) > batch_size:
-        for i in range(2):
-            batch = replay_buffer.sample(batch_size)
-            agent.train(batch)
     
     if (episode + 1) % 50 == 0:
         agent.update_target_network()
         
-    if (episode + 1) % 10 == 0:
-        writer.add_scalar("modified_rewards/sum_reward", np.mean(rewards_queue), episode + 1)
-        writer.add_scalar("modified_rewards/waypoint_reward", np.mean(r_w), episode + 1)
-        writer.add_scalar("modified_rewards/velocity_reward", np.mean(r_v), episode + 1)
-        writer.add_scalar("modified_rewards/position_reward", np.mean(r_p), episode + 1)
-        writer.add_scalar("modified_rewards/angle_reward", np.mean(r_a), episode + 1)
+    writer.add_scalar("modified_rewards/sum_reward", episode_reward, episode + 1)
+    writer.add_scalar("modified_rewards/waypoint_reward", w_reward, episode + 1)
+    writer.add_scalar("modified_rewards/velocity_reward", v_reward, episode + 1)
+    writer.add_scalar("modified_rewards/position_reward", p_reward, episode + 1)
+    writer.add_scalar("modified_rewards/angle_reward", a_reward, episode + 1)
     
-    if (episode + 1) % 20 == 0:
+    if (episode + 1) % 10 == 0:
         torch.save(agent.q_net.state_dict(), f"DQN_car_{episode+1}.pth")
 
 writer.close()
