@@ -65,7 +65,7 @@ brake_agent = PPO_Agent()
 if args.scene == 'normal':
     brake_agent.actor_net.load_state_dict(torch.load('weight/PPO_Turn_Left_Actor_780e.pth', weights_only=True))
 elif args.scene == 'difficult':
-    pass
+    brake_agent.actor_net.load_state_dict(torch.load('weight/PPO_Turn_Left_Actor_Difficult_720e.pth', weights_only=True))
 else:
     print('Please choose normal or difficult.')
     exit()

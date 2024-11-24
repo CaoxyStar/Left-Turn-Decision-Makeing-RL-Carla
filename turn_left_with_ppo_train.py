@@ -63,10 +63,13 @@ action_space_dims = (3, 5, 3)
 env = CarlaEnv()
 
 agent = QLearningAgent(state_space_dims, action_space_dims)
-agent.q_net.load_state_dict(torch.load("weight/DQN_car_3250.pth", weights_only=True))
+agent.q_net.load_state_dict(torch.load("weight/DQN_Path_Following_3250e.pth", weights_only=True))
 print('Load the parameters of path following agent successfully!')
 
 brake_agent = PPO_Agent()
+if args.scene == 'difficult':
+    brake_agent.actor_net.load_state_dict(torch.load('weight/PPO_Turn_Left_Actor_780e.pth', weights_only=True))
+    brake_agent.value_net.load_state_dict(torch.load('weight/PPO_Turn_Left_Value_780e.pth', weights_only=True))
 
 
 # train
