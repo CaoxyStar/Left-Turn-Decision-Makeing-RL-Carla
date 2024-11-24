@@ -2,6 +2,7 @@ import torch
 import numpy as np
 from torch.utils.tensorboard import SummaryWriter
 import collections
+import argparse
 
 from carla_env import CarlaEnv
 from DQN.DQN import QLearningAgent
@@ -49,10 +50,14 @@ def action_mapping(action):
     return throttle, steering, brake
 
 
+# parser
+parser = argparse.ArgumentParser()
+parser.add_argument('--scene', type=str, default='normal')
+args = parser.parse_args()
+
 # parameters
 state_space_dims = 5
 action_space_dims = (3, 5, 3)
-
 
 # initialize env and agent
 env = CarlaEnv()
@@ -65,7 +70,7 @@ brake_agent = PPO_Agent()
 
 
 # train
-writer = SummaryWriter("runs/PPO_forward")
+writer = SummaryWriter("runs/PPO_Turn_Left")
 
 episode_num = int(1e3)
 queue = collections.deque(maxlen=25)
@@ -74,7 +79,7 @@ eps_high = 0.2
 eps_low = 0.01
 
 for episode in range(episode_num):
-    state = env.reset(scene='normal')
+    state = env.reset(scene=args.scene)
     state_follow, state_brake = brake_agent.convert_state(state)
     
     episode_reward = 0

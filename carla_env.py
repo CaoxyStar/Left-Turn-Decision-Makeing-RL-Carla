@@ -97,7 +97,7 @@ class CarlaEnv():
         if scene == 'normal':
             self.spawn_normal_vehicle()
         elif scene == 'difficult':
-            self.spawn_difficult_vehicles()
+            self.spawn_difficult_vehicle()
         elif scene == 'path_following':
             pass
         else:
@@ -336,3 +336,44 @@ class CarlaEnv():
             auto_vehicle.set_transform(auto_waypoint.transform)
             auto_vehicle.set_autopilot(True, 8000)
             location.x = location.x - 7
+    
+    def spawn_difficult_vehicle(self):
+        forward_outer_num = random.randint(1, 3)
+        right_outer_num = random.randint(1, 3)
+        left_outer_num = random.randint(1, 3)
+        
+        auto_vehicle_bp = self.vehicle_bps.find('vehicle.audi.a2')
+        location = carla.Location()
+        location.z = 0
+
+        # spawn vehicles in the forward direction
+        location.x = 35
+        location.y = 105
+        for i in range(forward_outer_num):
+            auto_waypoint = self.map.get_waypoint(location, project_to_road=True, lane_type=carla.LaneType.Driving)
+            auto_vehicle = self.world.spawn_actor(auto_vehicle_bp, random.choice(self.map.get_spawn_points()))
+            auto_vehicle.set_transform(auto_waypoint.transform)
+            auto_vehicle.set_autopilot(True, 8000)
+            location.y = location.y + 7
+
+        # spawn vehicles in the right direction
+        location.x = 14
+        location.y = 95
+
+        for i in range(right_outer_num):
+            auto_waypoint = self.map.get_waypoint(location, project_to_road=True, lane_type=carla.LaneType.Driving)
+            auto_vehicle = self.world.spawn_actor(auto_vehicle_bp, random.choice(self.map.get_spawn_points()))
+            auto_vehicle.set_transform(auto_waypoint.transform)
+            auto_vehicle.set_autopilot(True, 8000)
+            location.x = location.x - 7
+
+        # spawn vehicles in the left direction
+        location.x = 45
+        location.y = 85
+
+        for i in range(left_outer_num):
+            auto_waypoint = self.map.get_waypoint(location, project_to_road=True, lane_type=carla.LaneType.Driving)
+            auto_vehicle = self.world.spawn_actor(auto_vehicle_bp, random.choice(self.map.get_spawn_points()))
+            auto_vehicle.set_transform(auto_waypoint.transform)
+            auto_vehicle.set_autopilot(True, 8000)
+            location.x = location.x + 7

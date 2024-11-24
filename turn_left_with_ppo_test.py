@@ -1,4 +1,5 @@
 import torch
+import argparse
 
 from carla_env import CarlaEnv
 from DQN.DQN import QLearningAgent
@@ -45,6 +46,10 @@ def action_mapping(action):
 
     return throttle, steering, brake
 
+# parser
+parser = argparse.ArgumentParser()
+parser.add_argument('--scene', type=str, default='normal')
+args = parser.parse_args()
 
 # parameters
 state_space_dims = 5
@@ -57,14 +62,20 @@ agent = QLearningAgent(state_space_dims, action_space_dims)
 agent.q_net.load_state_dict(torch.load("weight/DQN_Path_Following_3250e.pth", weights_only=True))
 
 brake_agent = PPO_Agent()
-brake_agent.actor_net.load_state_dict(torch.load('weight/PPO_Turn_Left_Actor_780e.pth', weights_only=True))
+if args.scene == 'normal':
+    brake_agent.actor_net.load_state_dict(torch.load('weight/PPO_Turn_Left_Actor_780e.pth', weights_only=True))
+elif args.scene == 'difficult':
+    pass
+else:
+    print('Please choose normal or difficult.')
+    exit()
 
 
 # test
 success = 0
 
 for i in range(10):
-    state = env.reset(scene='normal')
+    state = env.reset(scene=args.scene)
     state_follow, state_brake = brake_agent.convert_state(state)
 
     done = False
