@@ -325,7 +325,7 @@ class CarlaEnv():
             auto_vehicle = self.world.spawn_actor(auto_vehicle_bp, random.choice(self.map.get_spawn_points()))
             auto_vehicle.set_transform(auto_waypoint.transform)
             auto_vehicle.set_autopilot(True, 8000)
-            location.x = location.x - 7
+            location.x = location.x - 8
 
         location.x = 14
         location.y = 95
@@ -335,7 +335,7 @@ class CarlaEnv():
             auto_vehicle = self.world.spawn_actor(auto_vehicle_bp, random.choice(self.map.get_spawn_points()))
             auto_vehicle.set_transform(auto_waypoint.transform)
             auto_vehicle.set_autopilot(True, 8000)
-            location.x = location.x - 7
+            location.x = location.x - 8
     
     def spawn_difficult_vehicle(self):
         forward_outer_num = random.randint(1, 3)
@@ -354,7 +354,7 @@ class CarlaEnv():
             auto_vehicle = self.world.spawn_actor(auto_vehicle_bp, random.choice(self.map.get_spawn_points()))
             auto_vehicle.set_transform(auto_waypoint.transform)
             auto_vehicle.set_autopilot(True, 8000)
-            location.y = location.y + 7
+            location.y = location.y + 8
 
         # spawn vehicles in the right direction
         location.x = 14
@@ -365,7 +365,7 @@ class CarlaEnv():
             auto_vehicle = self.world.spawn_actor(auto_vehicle_bp, random.choice(self.map.get_spawn_points()))
             auto_vehicle.set_transform(auto_waypoint.transform)
             auto_vehicle.set_autopilot(True, 8000)
-            location.x = location.x - 7
+            location.x = location.x - 8
 
         # spawn vehicles in the left direction
         location.x = 45
@@ -376,4 +376,4 @@ class CarlaEnv():
             auto_vehicle = self.world.spawn_actor(auto_vehicle_bp, random.choice(self.map.get_spawn_points()))
             auto_vehicle.set_transform(auto_waypoint.transform)
             auto_vehicle.set_autopilot(True, 8000)
-            location.x = location.x + 7
+            location.x = location.x + 8
