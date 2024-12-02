@@ -1,15 +1,36 @@
-# Plan
+# Left Turn Decision Making in Carla through Reinforcement Learning
+-------------------------------------------------------------------
 
-1. Train the model of three different directions
-2. save best weight, training curve, success rate and gif
-3. PPT -> Curriculum Learning, fixed scene learning, random scene learning
+# Intruduction
+
+This repository provides a solution for the problem of left-turn decision-making at intersections without traffic signals. The ego vehicle needs to turn left while avoiding other cars. Additionally, we introduce an interactive environment within the CARLA simulator for reinforcement learning, named carla-env.
+
+The solution leverages deep reinforcement learning techniques, including PPO and DQN algorithms. We also adopt a curriculum learning approach to break the task into two phases: the basic phase focuses on path-following using DQN, while the more advanced phase addresses left-turn decision-making with PPO.
+
+The observation space consists of two components: the planned future path and the semantic input in BEV (Bird's Eye View) space. The action space is discrete, with the following values: throttle {0.3, 0.5, 0.7}, steering {-0.4, -0.2, 0.0, 0.2, 0.4} and brake {0, 0.4, 0.8}.
+
+# Demo
+
+![Demo1](demo/demo_1.gif)  ![Demo2](demo/demo_2.gif)  ![Demo3](demo/demo_3.gif)
 
 
-right -> 570: 0.49 | 780: 0.71
+# Usage
+Path Following Train:
+
+`python path_following_with_dqn_train.py`
+
+Path Following Test:
+
+`python path_following_with_dqn_test.py `
+
+Left-Turn Decision-Making Train:
+
+`python turn_left_with_ppo_train.py --scene normal`
+
+Left-Turn Decision-Making Test:
+
+`python turn_left_with_ppo_test.py --scene normal`
 
 
 
-Future:
-1. more complicated scene -> facing cars from three directions simultaneous
-2. different driving style
-3. sum up
+
