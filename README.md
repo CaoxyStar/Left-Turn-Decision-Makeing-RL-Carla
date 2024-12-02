@@ -10,9 +10,7 @@ The observation space consists of two components: the planned future path and th
 
 ## Demo
 
-<img src=demo/demo_1.gif title="Demo_1" width="250"/>
-<img src=demo/demo_2.gif title="Demo_2" width="250"/>
-<img src=demo/demo_3.gif title="Demo_3" width="250"/>
+<img src=demo/demo_1.gif title="Demo_1" width="250"/> <img src=demo/demo_2.gif title="Demo_2" width="250"/> <img src=demo/demo_3.gif title="Demo_3" width="250"/>
 
 
 ## Usage
