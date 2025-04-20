@@ -8,6 +8,12 @@ The solution leverages deep reinforcement learning techniques, including PPO and
 
 The observation space consists of two components: the planned future path and the semantic input in BEV (Bird's Eye View) space. The action space is discrete, with the following values: throttle {0.3, 0.5, 0.7}, steering {-0.4, -0.2, 0.0, 0.2, 0.4} and brake {0, 0.4, 0.8}.
 
+
+## Network
+
+<img src=demo/network.png title="Demo_1"/>
+
+
 ## Demo
 
 <img src=demo/demo_1.gif title="Demo_1" width="250"/> <img src=demo/demo_2.gif title="Demo_2" width="250"/> <img src=demo/demo_3.gif title="Demo_3" width="250"/>
