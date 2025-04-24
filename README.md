@@ -11,7 +11,7 @@ The observation space consists of two components: the planned future path and th
 
 ## Network
 
-<img src=demo/network.png title="Demo_1" width="700"/>
+<img src=demo/network.png title="Demo_1" width="750"/>
 
 
 ## Demo
